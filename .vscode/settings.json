@@ -1,0 +1,26 @@
+{
+  "git.ignoreLimitWarning": true,
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorTheme": "Dracula",
+  "window.zoomLevel": -1,
+  "editor.fontLigatures": true,
+  "editor.fontSize": 18,
+  "editor.lineHeight": 24,
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.rulers": [
+    80,
+    120
+  ],
+  "editor.renderLineHighlight": "gutter",
+  "explorer.confirmDelete": false,
+  "files.associations": {
+    "*.html": "html",
+    "*.ejs": "nunjucks"
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "explorer.confirmDragAndDrop": false,
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  }
+}
