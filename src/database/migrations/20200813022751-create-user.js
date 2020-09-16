@@ -7,11 +7,11 @@ module.exports = {
         defaultValue: Sequelize.UUIDV1,
         primaryKey: true,
       },
-      first_name: {
+      name: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      last_name: {
+      document: {
         allowNull: false,
         type: Sequelize.STRING,
       },
@@ -19,7 +19,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      cpf: {
+      password_hash: {
         allowNull: false,
         type: Sequelize.STRING,
       },
@@ -38,6 +38,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Users");
+    await queryInterface.dropTable("users");
   },
 };

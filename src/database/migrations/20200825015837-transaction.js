@@ -23,11 +23,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
-      txid: {
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV1,
-        primaryKey: true,
-      },
       amount_coin: {
         allowNull: false,
         type: Sequelize.FLOAT,
@@ -59,6 +54,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Transactions");
+    await queryInterface.dropTable("transactions");
   },
 };
