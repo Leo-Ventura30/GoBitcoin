@@ -18,8 +18,7 @@ module.exports = {
       },
       id_type_wallet: {
         allowNull: false,
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV1,
+        type: Sequelize.INTEGER,
         references: { model: "type_wallets", key: "id" },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
@@ -30,7 +29,7 @@ module.exports = {
       },
       quantity: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.FLOAT,
       },
       created_at: {
         allowNull: false,

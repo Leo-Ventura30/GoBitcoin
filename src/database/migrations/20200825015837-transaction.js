@@ -4,7 +4,7 @@ module.exports = {
     await queryInterface.createTable("transactions", {
       id: {
         type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: Sequelize.UUIDV1,
         primaryKey: true,
       },
       id_user: {
@@ -39,7 +39,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.FLOAT,
       },
-      status_transaction: {
+      status: {
         allowNull: false,
         type: Sequelize.INTEGER,
       },

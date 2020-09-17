@@ -31,7 +31,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.FLOAT,
       },
-      status_transaction: {
+      status: {
         allowNull: false,
         type: Sequelize.INTEGER,
       },

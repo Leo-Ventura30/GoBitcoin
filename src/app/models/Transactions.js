@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+      defaultValue: DataTypes.UUIDV1,
     },
     id_user: {
       allowNull: false,
@@ -13,19 +13,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     type_order: DataTypes.INTEGER,
     type_transaction: DataTypes.INTEGER,
-    txid: {
-      allowNull: false,
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV1,
-    },
     amount_coin: DataTypes.FLOAT,
     unity_price: DataTypes.FLOAT,
     fee_price: DataTypes.FLOAT,
     total_price: DataTypes.FLOAT,
-    status_transaction: DataTypes.INTEGER,
+    status: DataTypes.INTEGER,
   });
   Transactions.associate = (models) => {
-    Transactions.belongsTo(models.User, { foreignKey: "user_id" });
+    Transactions.belongsTo(models.User, { foreignKey: "id_user" });
   };
   return Transactions;
 };

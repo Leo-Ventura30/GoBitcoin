@@ -8,6 +8,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(routes);
 
-app.listen(3030, () => {
+app.listen(80, () => {
   console.log("ON");
 });

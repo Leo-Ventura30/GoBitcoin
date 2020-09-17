@@ -6,11 +6,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV1,
     },
-    first_name: DataTypes.STRING,
-    last_name: DataTypes.STRING,
-    wallet_address: DataTypes.STRING,
-    money_wallet: DataTypes.FLOAT,
-    bitcoin_wallet: DataTypes.FLOAT,
+    name: DataTypes.STRING,
+    document: DataTypes.STRING,
+    email: DataTypes.STRING,
+    password: DataTypes.VIRTUAL,
+    password_hash: DataTypes.FLOAT,
+    birthday: DataTypes.DATE,
   });
   return User;
 };

@@ -1,9 +1,14 @@
-const client = require("../../config/nodeBitcoin");
+const WalletDomains = require("../Domains/WalletsDomains");
 
 class walletController {
-  async getBalance(req, res) {
-    let balance = await client.getBalance();
-    return res.json(balance);
+  async createTypeWallet(req, res, next) {
+    try {
+      const { type } = req.body;
+      const Type = await WalletDomains.createTypeWallet(type);
+      return res.json(Type);
+    } catch (error) {
+      next(error);
+    }
   }
   async getNewAddress(req, res) {
     const address = await client.getNewAddress();
