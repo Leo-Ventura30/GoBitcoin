@@ -13,15 +13,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     id_type_wallet: {
       allowNull: false,
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV1,
+      type: DataTypes.INTEGER,
     },
     address: DataTypes.STRING,
     quantity: DataTypes.FLOAT,
   });
   Wallets.associate = (models) => {
-    Wallets.belongsTo(models.User, { foreignKey: "id_user" });
-    Wallets.belongsTo(models.type_wallets, { foreignKey: "id_type_wallet" });
+    Wallets.belongsTo(models.Users, { foreignKey: "id_user" });
+    Wallets.belongsTo(models.Typewallets, { foreignKey: "id_type_wallet" });
   };
   return Wallets;
 };

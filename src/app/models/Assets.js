@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     status: DataTypes.INTEGER,
   });
   Assets.associate = (models) => {
-    Assets.belongsTo(models.User, { foreignKey: "id_user" });
+    Assets.belongsTo(models.Users, { foreignKey: "id_user" });
   };
   return Assets;
 };

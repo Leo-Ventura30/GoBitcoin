@@ -5,12 +5,10 @@ const walletController = require("../controllers/walletController");
 const usersController = require("../controllers/usersController");
 const transactionsController = require("../controllers/transactionsController");
 
-// routes.get("/", walletController.getBalance);
+routes.get("/", walletController.getNewAddress);
 // routes.get("/broker/user/:id/info", usersController.getUserInfo);
 // routes.get("/broker/user/transaction", transactionsController.getTransaction);
-routes.get("/", (req, res) => {
-  res.send("caralho")
-})
+routes.post("/signin/create/user", usersController.createUser);
 routes.post("/admin/wallets/create/type/wallet", walletController.createTypeWallet);
 // routes.put("/broker/update/info/user", usersController.updateUser);
 // routes.post(

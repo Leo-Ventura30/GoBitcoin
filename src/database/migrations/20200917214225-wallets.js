@@ -19,17 +19,18 @@ module.exports = {
       id_type_wallet: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: { model: "type_wallets", key: "id" },
+        references: { model: "typewallets", key: "id" },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
       address: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING,
       },
       quantity: {
         allowNull: false,
         type: Sequelize.FLOAT,
+        defaultValue: 0.0
       },
       created_at: {
         allowNull: false,

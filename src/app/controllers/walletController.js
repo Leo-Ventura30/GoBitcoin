@@ -1,18 +1,18 @@
-const WalletDomains = require("../Domains/WalletsDomains");
+const WalletsDomains = require("../Domains/WalletsDomains");
 
 class walletController {
   async createTypeWallet(req, res, next) {
     try {
       const { type } = req.body;
-      const Type = await WalletDomains.createTypeWallet(type);
+      const Type = await WalletsDomains.createTypeWallet(type);
       return res.json(Type);
     } catch (error) {
-      next(error);
+      next(error.message);
     }
   }
   async getNewAddress(req, res) {
-    const address = await client.getNewAddress();
-    return JSON.stringify(address);
+    const Type = await WalletsDomains.getAllTypes()
+    return res.json(Type)
   }
 }
 

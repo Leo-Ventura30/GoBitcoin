@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     status: DataTypes.INTEGER,
   });
   Transactions.associate = (models) => {
-    Transactions.belongsTo(models.User, { foreignKey: "id_user" });
+    Transactions.belongsTo(models.Users, { foreignKey: "id_user" });
   };
   return Transactions;
 };

@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("type_wallets", {
+    await queryInterface.createTable("typewallets", {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -22,6 +22,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("type_wallets");
+    await queryInterface.dropTable("typewallets");
   }
 };
