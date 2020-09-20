@@ -15,6 +15,13 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
+      id_type_wallet: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: "typewallets", key: "id" },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
       type_order: {
         allowNull: false,
         type: Sequelize.INTEGER,

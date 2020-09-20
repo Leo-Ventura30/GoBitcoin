@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV1,
     },
+    id_type_wallet: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
     type_order: DataTypes.INTEGER,
     type_transaction: DataTypes.INTEGER,
     amount_coin: DataTypes.FLOAT,
@@ -21,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
   });
   Transactions.associate = (models) => {
     Transactions.belongsTo(models.Users, { foreignKey: "id_user" });
+    Transactions.belongsTo(models.Typewallets, {
+      foreignKey: "id_type_wallet",
+    });
   };
   return Transactions;
 };

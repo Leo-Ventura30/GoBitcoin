@@ -10,9 +10,30 @@ class walletController {
       next(error.message);
     }
   }
-  async getNewAddress(req, res) {
-    const Type = await WalletsDomains.getAllTypes()
-    return res.json(Type)
+  async getAllTypes(req, res, next) {
+    try {
+      const Type = await WalletsDomains.getAllTypes();
+      return res.json(Type);
+    } catch (error) {
+      next(error.message);
+    }
+  }
+  async getBalanche(req, res, next) {
+    try {
+      const Balance = await WalletsDomains.getBalance();
+      return res.json(Balance);
+    } catch (error) {
+      next(error.message);
+    }
+  }
+  async insertCoin(req, res, next) {
+    try {
+      const { email, quantity, type } = req.body;
+      const wallet = await WalletsDomains.insertCoin(email, quantity, type);
+      return res.json(wallet);
+    } catch (error) {
+      next(error.message);
+    }
   }
 }
 

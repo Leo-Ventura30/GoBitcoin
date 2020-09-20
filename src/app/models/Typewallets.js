@@ -3,9 +3,9 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       primaryKey: true,
       autoIncrement: true,
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
     },
     type: DataTypes.STRING,
-  })
+  });
   return Typewallets;
-}
+};
