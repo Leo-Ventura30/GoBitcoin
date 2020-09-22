@@ -16,16 +16,18 @@ class transactionsController {
         id_type_wallet,
         type_order,
         type_transaction,
+        unity_price,
       } = req.body;
       const Transaction = await TransactionsDomains.createTradeTransaction(
         amount_coin,
         id_type_wallet,
         type_order,
-        type_transaction
+        type_transaction,
+        unity_price
       );
       return res.json(Transaction);
     } catch (error) {
-      next(error.message);
+      next(error);
     }
   }
   async createSaleTransaction(req, res) {
