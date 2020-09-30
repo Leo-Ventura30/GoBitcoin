@@ -8,6 +8,7 @@ const transactionsController = require("../controllers/transactionsController");
 routes.get("/admin/all/types", walletController.getAllTypes);
 routes.get("/admin/balance/bitcoin", walletController.getBalanche);
 routes.get("/broker/user/transaction", transactionsController.getTransactions);
+routes.get("/", usersController.findUserByEmail);
 
 routes.post("/signin/create/user", usersController.createUser);
 routes.post(

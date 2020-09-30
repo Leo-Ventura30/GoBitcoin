@@ -121,18 +121,13 @@ class transactionsDomains {
         transaction.type_order,
         order
       );
-      console.log(findTransaction);
+      return findTransaction;
     } else {
-      const findTransaction = await Transactions.findAll({
-        where: {
-          total_price: {
-            [Op.gte]: transaction.total_price,
-          },
-          type_order: 0,
-          status: { [Op.or]: [status.opened, status.executed_part] },
-        },
-        order: [["total_price", "DESC"]],
-      });
+      order = [["total_price", "DESC"]];
+      const findTransaction = await this.whereIsTransaction(
+        transaction.type_order,
+        order
+      );
       return findTransaction;
     }
   }

@@ -1,9 +1,9 @@
-const { Typewallets, Wallets } = require("../models");
-const UsersDomains = require("../Domains/UsersDomains");
+const { Typewallets, Wallets, User } = require("../models");
 const Client = require("../../config/nodeBitcoin");
-const { min } = require("moment");
 const types = ["BRL", "BTC", "ETH", "LTC"];
-class walletDomains {
+const sequelize = Wallets.sequelize;
+
+class walletsDomains {
   async getBalance() {
     const Balance = Client.getBalance();
     return Balance;
@@ -24,12 +24,16 @@ class walletDomains {
     return Type;
   }
   async generateWallets(id_user) {
+    const t = await sequelize.transaction();
+
     const [{ type: BRL }, { type: BTC }] = await this.getAllTypes();
-    const { address: brl } = await this.getNewAddressReal(id_user, BRL);
-    const { address: btc } = await this.getNewAddressBitcoin(id_user, BTC);
+    const { address: brl } = await this.getNewAddressReal(id_user, BRL, t);
+    const { address: btc } = await this.getNewAddressBitcoin(id_user, BTC, t);
+    await t.commit();
+
     return { brl, btc };
   }
-  async getNewAddressReal(id_user, type) {
+  async getNewAddressReal(id_user, type, t) {
     if (type === types[0]) {
       const { id } = await Typewallets.findOne({ where: { type } });
       const wallet = await Wallets.create({
@@ -37,33 +41,40 @@ class walletDomains {
         id_type_wallet: id,
         address: "",
       });
+      if (!wallet) throw new Error(await t.rollback());
       return wallet;
     } else {
       throw new Error("Tipo invalido deve ser " + type);
     }
   }
-  async getNewAddressBitcoin(id_user, type) {
+  async getNewAddressBitcoin(id_user, type, t) {
     if (type === types[1]) {
       const address = await Client.getNewAddress();
       const { id } = await Typewallets.findOne({ where: { type } });
-      const wallet = await Wallets.create({
-        id_user,
-        id_type_wallet: id,
-        address,
-      });
+      const wallet = await Wallets.create(
+        {
+          id_user,
+          id_type_wallet: id,
+          address,
+        },
+        {
+          transaction: t,
+        }
+      );
+      if (!wallet) throw new Error(await t.rollback());
       return wallet;
     } else {
       throw new Error("Tipo invalido deve ser " + type);
     }
   }
-  async getWalletByUser(id_user, type) {
+  async getWalletByUser(id_user, type, t) {
     const Wallet = await Wallets.findOne({
       where: { id_user, id_type_wallet: type },
     });
     return Wallet;
   }
   async insertCoin(email, quantity, type) {
-    const { id } = await UsersDomains.findUserByEmail(email);
+    const { id } = await User.findOne({ where: { email } });
     if (id) {
       const { quantity: amount } = await this.getWalletByUser(id, type);
       quantity += amount;
@@ -91,7 +102,7 @@ class walletDomains {
           "Valor deve ser maior ou igual á " +
             min_transaction +
             ", seu valor atual é de " +
-            (amount_coin * unity_price).toFixed(2)
+            amount_coin * unity_price
         );
       } else {
         throw new Error(
@@ -102,5 +113,4 @@ class walletDomains {
     return true;
   }
 }
-
-module.exports = new walletDomains();
+module.exports = new walletsDomains();
