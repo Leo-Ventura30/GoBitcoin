@@ -25,15 +25,20 @@ class transactionsController {
         type_transaction,
         unity_price
       );
+      await TransactionsDomains.approveTransaction(Transaction);
       return res.json(Transaction);
     } catch (error) {
       next(error);
     }
   }
-  async createSaleTransaction(req, res) {
-    return res.json();
+  async whereTransaction(req, res) {
+    const transaction = await TransactionsDomains.whereIsTransaction();
+    return res.json(transaction);
   }
 
-  async analystTransaction(req, res) {}
+  async analystTransaction(req, res) {
+    const analystTransaction = await TransactionsDomains.analystTransaction();
+    return res.json(analystTransaction);
+  }
 }
 module.exports = new transactionsController();

@@ -1,4 +1,4 @@
-const { Typewallets, Wallets, User } = require("../models");
+const { Typewallets, Wallets, Users } = require("../models");
 const Client = require("../../config/nodeBitcoin");
 const types = ["BRL", "BTC", "ETH", "LTC"];
 const sequelize = Wallets.sequelize;
@@ -67,14 +67,14 @@ class walletsDomains {
       throw new Error("Tipo invalido deve ser " + type);
     }
   }
-  async getWalletByUser(id_user, type, t) {
+  async getWalletByUser(id_user, type) {
     const Wallet = await Wallets.findOne({
       where: { id_user, id_type_wallet: type },
     });
     return Wallet;
   }
   async insertCoin(email, quantity, type) {
-    const { id } = await User.findOne({ where: { email } });
+    const { id } = await Users.findOne({ where: { email } });
     if (id) {
       const { quantity: amount } = await this.getWalletByUser(id, type);
       quantity += amount;
@@ -89,21 +89,16 @@ class walletsDomains {
       );
     }
   }
-  async analystCoin(quantity, amount_coin, min_transaction, unity_price) {
+  async analystCoin(quantity, amount_coin, min_transaction) {
     if (
       quantity <= 0 ||
       quantity < min_transaction ||
       amount_coin < min_transaction
     ) {
       if (quantity <= 0) {
-        throw new Error("Saldo indisponivel");
+        throw new Error("Saldo insuficiente " + quantity);
       } else if (amount_coin < min_transaction) {
-        throw new Error(
-          "Valor deve ser maior ou igual á " +
-            min_transaction +
-            ", seu valor atual é de " +
-            amount_coin * unity_price
-        );
+        throw new Error("Valor deve ser maior ou igual á " + min_transaction);
       } else {
         throw new Error(
           "Impossivel realizar transação verifique seu saldo ou valor minímo de compra"

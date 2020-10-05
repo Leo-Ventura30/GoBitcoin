@@ -41,6 +41,10 @@ class UsersDomains {
     }
     return User;
   }
+  async findByid(id) {
+    const user = await Users.findByPk(id);
+    return user;
+  }
 }
 
 module.exports = new UsersDomains();

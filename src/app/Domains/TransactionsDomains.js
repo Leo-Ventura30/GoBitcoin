@@ -1,11 +1,10 @@
 const client = require("../../config/nodeBitcoin");
 const UsersDomains = require("../Domains/UsersDomains");
 const WalletsDomains = require("../Domains/WalletsDomains");
-const { Transactions } = require("../models");
-const { Op } = require("sequelize");
+const { Transactions, Wallets } = require("../models");
+const { Op, json, where } = require("sequelize");
 const status = { opened: 0, executed: 1, executed_part: 2, cancelled: 3 };
 const min_transaction = 10;
-// const unity_price = 50000.0;
 
 class transactionsDomains {
   async getTransactions() {
@@ -25,20 +24,24 @@ class transactionsDomains {
     type_transaction,
     unity_price
   ) {
-    const email = "talhitwre36w360455343twdd775fs6ds7ry34afv@gmail.com";
+    const email = "alansbsssssssdas@hot.com";
     const { id: id_user } = await UsersDomains.findUserByEmail(email);
     const { quantity } = await WalletsDomains.getWalletByUser(
       id_user,
       id_type_wallet
     );
-    var { fee_price, total_price } = await this.checkTransaction(
+
+    const {
+      quantity_transaction,
+      fee_price,
+      total_price,
+    } = await this.checkTransaction(
       amount_coin,
       id_type_wallet,
       type_order,
       quantity,
       unity_price
     );
-
     const transaction = await Transactions.create({
       id_user,
       id_type_wallet,
@@ -47,10 +50,10 @@ class transactionsDomains {
       amount_coin,
       unity_price,
       fee_price,
+      quantity: quantity_transaction,
       total_price: total_price.toFixed(8),
       status: status.opened,
     });
-    await this.approveTransaction(transaction);
     return transaction;
   }
   toFixedFee(fee_price) {
@@ -82,36 +85,34 @@ class transactionsDomains {
     if (type_order === 0 || id_type_wallet === 1) {
       var total_price = parseFloat(amount_coin / unity_price).toFixed(8);
       var fee_price = parseFloat(total_price * fee_rate).toFixed(8);
-      total_price = total_price * unity_price - fee_price;
-      await WalletsDomains.analystCoin(
-        quantity,
-        amount_coin,
-        min_transaction,
-        unity_price
-      );
+      var quantity_transaction = total_price - fee_price;
+      total_price -= fee_price;
+      total_price *= unity_price;
+      if (amount_coin > quantity) {
+        throw new Error("Saldo insuficiente");
+      }
+      await WalletsDomains.analystCoin(quantity, amount_coin, min_transaction);
     } else {
       total_price = parseFloat(amount_coin * unity_price).toFixed(8);
       fee_price = parseFloat(total_price * fee_rate).toFixed(8);
+      quantity_transaction = total_price - fee_price;
       total_price -= fee_price;
-
+      if (amount_coin > quantity) {
+        throw new Error("Saldo insuficiente");
+      }
       await WalletsDomains.analystCoin(
-        quantity,
+        quantity * unity_price,
         amount_coin * unity_price,
-        min_transaction,
-        unity_price
+        min_transaction
       );
     }
-    return { fee_price, total_price };
+    return { quantity_transaction, fee_price, total_price };
   }
-  async whereIsTransaction(type_order, order) {
+  async whereIsTransaction(type_order, unity_price, order) {
     const findTransaction = await Transactions.findAll({
-      where: {
-        type_order,
-        status: { [Op.or]: [status.opened, status.executed_part] },
-      },
+      where: { unity_price, type_order },
       order: order,
     });
-
     return findTransaction;
   }
   async approveTransaction(transaction) {
@@ -119,17 +120,57 @@ class transactionsDomains {
       var order = [["unity_price", "ASC"]];
       const findTransaction = await this.whereIsTransaction(
         transaction.type_order,
+        transaction.unity_price,
         order
       );
+      await this.analystTransaction(transaction, findTransaction);
+      // const user = await WalletsDomains.getWalletByUser(
+      //   transaction.id_user,
+      //   transaction.id_type_wallet
+      // );
       return findTransaction;
     } else {
-      order = [["total_price", "DESC"]];
+      order = [["unity_price", "DESC"]];
       const findTransaction = await this.whereIsTransaction(
         transaction.type_order,
+        transaction.unity_price,
         order
       );
       return findTransaction;
     }
   }
+  async analystTransaction(buyer, seller) {
+    const walletsByTraders = await Wallets.findAll({
+      where: {
+        [Op.or]: [
+          {
+            id_user: buyer.id_user,
+            id_type_wallet: buyer.id_type_wallet,
+          },
+          {
+            id_user: seller[0].id_user,
+            id_type_wallet: seller[0].id_type_wallet,
+          },
+          ,
+        ],
+      },
+    });
+    console.log(JSON.stringify(walletsByTraders));
+    return walletsByTraders;
+    // if (transaction.total_price <= findTransaction[0].total_price) {
+    //   if (transaction.total_price > findTransaction[0].total_price) {
+    //     const walletsByTraders = await Wallets.findAll({
+    //       where: {
+    //         id_user: transaction.id_user,
+    //         id_user: findTransaction[0].id_user,
+    //       },
+    //     });
+    //     console.log(walletsByTraders);
+    //   } else {
+    //   }
+    // } else if (transaction) {
+    // }
+  }
 }
+
 module.exports = new transactionsDomains();

@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     amount_coin: DataTypes.FLOAT,
     unity_price: DataTypes.FLOAT,
     fee_price: DataTypes.FLOAT,
+    quantity: DataTypes.FLOAT,
     total_price: DataTypes.FLOAT,
     status: DataTypes.INTEGER,
   });
